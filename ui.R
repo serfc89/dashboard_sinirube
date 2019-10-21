@@ -13,20 +13,15 @@ return(outlier)}
 #e6f2ff
 columnn_color <-"background-color:#cce6ff; border-style: solid; border-color: #e6f2ff;"
 
-shinydashboard::dashboardPage(skin = 'blue',
-               dashboardHeader(disable = T#title="Programas Sociales Financiados por Fodesaf"
-                              ),
-               dashboardSidebar(collapsed = T, sidebarMenu(id="tabs",
-                                            menuItem("DashBoard", tabName = "dashboard", icon = icon("dashboard", lib = "glyphicon"))
-               )
-               ),
-               dashboardBody(
-                   tabItems(
-                       tabItem(tabName = "dashboard",
+
+navbarPage(img(src = "fodesaf.jpg", witdh=70, height = 60), theme = shinythemes::shinytheme(theme = "readable") ,
+           tabPanel("Ejecución",
+              shinydashboard::dashboardPage(skin = 'blue',header = dashboardHeader(disable = T), sidebar = dashboardSidebar(collapsed = T),
+                  body = dashboardBody(
+                      
                                fluidRow(
-                                 column(3, img(src = "fodesaf.jpg", witdh=70, height = 60)),
-                                 column(3,selectInput("programas", "Seleccione un programa", unique(gauges$programa), selected = "Banhvi")),
-                                 column(3, selectInput("trimestre", label = "Seleccione un trimestre o semestre", choices = unique(gauges$Acumulado), selected = "IT")), 
+                                 column(4,selectInput("programas", "Seleccione un programa", unique(gauges$programa), selected = "Banhvi")),
+                                 column(4, selectInput("trimestre", label = "Seleccione un trimestre o semestre", choices = unique(gauges$Acumulado), selected = "IT")), 
                                  column(width = 1, radioButtons("ano", label = "Seleccione un año",choices = unique(gauges$Ano), selected = "2018")),
                                  column(width = 1,  div("Consultas o comentarios",a(icon("envelope", "fa-3x") ,  target="_blank", href =  "mailto:direccion.desaf@mtss.go.cr ")))
                                  ),
@@ -51,7 +46,7 @@ shinydashboard::dashboardPage(skin = 'blue',
                               
                                    column(6, plotlyOutput(outputId = "promedio", height = 200),p(style="color:#4da6ff", "Fuente: Sistema de Indicadores Desaf "), br(), plotlyOutput("boxplot", height = 300)%>% helper(type = "markdown",content = "boxplot"), p(style="color:#4da6ff", "Fuente: Sinirube: 2018-2019")) ,
                                
-                                   column(6, leafletOutput(outputId = "mapa", height = 500)),
+                                   column(6, leafletOutput(outputId = "mapa1", height = 500)),
                                tags$head(tags$style(HTML('
                                 
 
@@ -87,10 +82,30 @@ shinydashboard::dashboardPage(skin = 'blue',
                                 ')))
                                    
                                
-                       )
                        
                        
-                   )
+                       
+                   
                )
              
+    )
+  ),
+
+tabPanel("Beneficiarios", 
+         dashboardPage(header = dashboardHeader(disable = T), sidebar = dashboardSidebar(disable = T), 
+                       body = dashboardBody(
+                         
+                         fluidRow(column(6, leafletOutput(outputId = "mapa", height = 500)),
+                                  column(3),
+                                  column(3))
+                         
+                         
+                       ))
+         
+         
+        
+         
+         
+         
+         )
 )
